@@ -8,14 +8,14 @@
   <link rel="dns-prefetch" href="https://tang1129.github.io">
   <title>深度解读C/C++指针与数组 | 夏了夏天</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="指针和数组是密切相关的。事实上，指针和数组在很多情况下是可以互换的。例如，一个指向数组开头的指针，可以通过使用指针的算术运算或数组索引来访问数组。今天我们就来聊一聊数组和指针千丝万缕的关系。 一维数组与指针 指针可以用来访问数组，也可以用来改变数组成员，这点与数组本身的下标运算符功能并无区别，请看下面程序演示： int arr[4] &#x3D; {520,1314,521,3344}; int* p &#x3D;">
+  <meta name="description" content="指针和数组是密切相关的。事实上，指针和数组在很多情况下是可以互换的。例如，一个指向数组开头的指针，可以通过使用指针的算术运算或数组索引来访问数组。今天我们就来聊一聊数组和指针千丝万缕的关系。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度解读C&#x2F;C++指针与数组">
 <meta property="og:url" content="https://tang1129.github.io/2020/08/08/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BBC-C-%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/index.html">
 <meta property="og:site_name" content="夏了夏天">
-<meta property="og:description" content="指针和数组是密切相关的。事实上，指针和数组在很多情况下是可以互换的。例如，一个指向数组开头的指针，可以通过使用指针的算术运算或数组索引来访问数组。今天我们就来聊一聊数组和指针千丝万缕的关系。 一维数组与指针 指针可以用来访问数组，也可以用来改变数组成员，这点与数组本身的下标运算符功能并无区别，请看下面程序演示： int arr[4] &#x3D; {520,1314,521,3344}; int* p &#x3D;">
+<meta property="og:description" content="指针和数组是密切相关的。事实上，指针和数组在很多情况下是可以互换的。例如，一个指向数组开头的指针，可以通过使用指针的算术运算或数组索引来访问数组。今天我们就来聊一聊数组和指针千丝万缕的关系。">
 <meta property="article:published_time" content="2020-08-08T15:31:26.000Z">
-<meta property="article:modified_time" content="2020-08-08T15:35:21.849Z">
+<meta property="article:modified_time" content="2020-08-08T15:36:50.872Z">
 <meta property="article:author" content="shuaitao.tang">
 <meta name="twitter:card" content="summary">
   
@@ -174,6 +174,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>指针和数组是密切相关的。事实上，指针和数组在很多情况下是可以互换的。<br>例如，一个指向数组开头的指针，可以通过使用指针的算术运算或数组索引来访问数组。<br>今天我们就来聊一聊数组和指针千丝万缕的关系。</p>
+<a id="more"></a>
+
 <p>一维数组与指针</p>
 <p>指针可以用来访问数组，也可以用来改变数组成员，这点与数组本身的下标运算符功能并无区别，<br>请看下面程序演示：</p>
 <p>int arr[4] = {520,1314,521,3344};</p>
