@@ -151,6 +151,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-深度解读C-C-指针与数组" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/08/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BBC-C-%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/">深度解读C/C++指针与数组</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/08/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BBC-C-%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" class="archive-article-date">
+  	<time datetime="2020-08-08T15:31:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>指针和数组是密切相关的。事实上，指针和数组在很多情况下是可以互换的。<br>例如，一个指向数组开头的指针，可以通过使用指针的算术运算或数组索引来访问数组。<br>今天我们就来聊一聊数组和指针千丝万缕的关系。</p>
+<p>一维数组与指针</p>
+<p>指针可以用来访问数组，也可以用来改变数组成员，这点与数组本身的下标运算符功能并无区别，<br>请看下面程序演示：</p>
+<p>int arr[4] = {520,1314,521,3344};</p>
+<p>int* p = NULL ;</p>
+<p>p = arr ;</p>
+<p>for (int i = 0; i &lt; 4; i++)</p>
+<p>{</p>
+<p>cout&lt;&lt;*（p+i）&lt;&lt;endl;</p>
+<p>}</p>
+<p>运行结果我们会发现，两个循环打印出来的结果是一样的，这是为什么呢？现在我们一起来探讨一下：<br>首先我们需要知道两个常识：</p>
+<p>第一个：数组在内存中存储各元素是物理相连的；</p>
+<p>第二个：数组的数组名（在此例中就是arr）代表的就是该数组在内存中的首地址；</p>
+<p>我们可以打印arr看一下：cout&lt;</p>
+<p>当然你也可以将p指向arr的任何一个元素，比如arr[1]，<br>那么p+1就是指向的arr的第三个元素了，这个大家需要注意；<br>指针和数组能这样互用主要是因为数组的存储是物理连续的，否则是不行的，想链表这种结构就不行；</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/08/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BBC-C-%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-网络基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
