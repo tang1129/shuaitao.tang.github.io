@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    网络基础 |  
+    linux下的动态链接库问题 |  
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -47,8 +47,8 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-网络基础"
-  class="article article-type-post"
+  id="linux-linux下的动态链接库问题"
+  class="article article-type-linux"
   itemscope
   itemprop="blogPost"
   data-scroll-reveal
@@ -58,22 +58,22 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  网络基础
+  linux下的动态链接库问题
 </h1>
  
 
     </header>
      
     <div class="article-meta">
-      <a href="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="article-date">
-  <time datetime="2020-04-08T09:51:38.000Z" itemprop="datePublished">2020-04-08</time>
+      <a href="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2020-08-11T10:15:55.000Z" itemprop="datePublished">2020-08-11</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">816</span>
+            <span class="post-count">1.7k</span>
         </span>
     </span>
 
@@ -82,7 +82,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">6 min</span>
         </span>
     </span>
 </div>
@@ -97,30 +97,38 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="OSI参考模型与TCP-IP参考模型"><a href="#OSI参考模型与TCP-IP参考模型" class="headerlink" title="OSI参考模型与TCP/IP参考模型"></a>OSI参考模型与TCP/IP参考模型</h2><p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-1e92808ddbe701c0f1434103cd109dd8_720w.jpg" alt="TCP/IP参考模型"></p>
+  <p>在 Linux 开发时，我们经常会看到一些形如 xxx.so 的名称出现，其中 so 是 Shared Object 的缩写，即可以共享的目标文件，也就是我们所称为的动态链接库，和在 Windows 下大家玩游戏时遇到的 xxx.dll 错误中的文件是一个类型的。</p>
 <a id="more"></a>
 
-<p><strong>物理层</strong>: 指的是电信号的传递方式，比如现在以太网通用的网线<br><strong>链路层</strong>：负责网卡设备的驱动、帧同步（就是说从网线上检测到什么信号算作新帧的开始）、冲突检测（如果检测到冲突就自动重发）、数据差错校验等工作。<br><strong>网络层</strong>：负责点到点的传输（这里的“点”指主机或路由器），Internet上的主机通过IP地址来标识，IP协议是构成Internet的基础。<br><strong>传输层</strong>：负责端到端的传输（这里的“端”指源主机和目的主机）。传输层可选择TCP或UDP协议。<br><strong>会话层</strong>： 解决传输层有一个发送方多个接收方时确定发给谁的问题<br><strong>表示层</strong>：解决会话层仅仅是文字的交互，提供多种数据格式的显示功能（编码）<br><strong>应用层</strong>：将表示层封装，提供用户接口</p>
-<h2 id="什么是协议？"><a href="#什么是协议？" class="headerlink" title="什么是协议？"></a>什么是协议？</h2><p>双方“约定”好的，按照一定格式传输固定数据</p>
-<h2 id="数据包封装"><a href="#数据包封装" class="headerlink" title="数据包封装"></a>数据包封装</h2><p>应用层数据通过协议栈发到网络上时，每层协议都要加上一个数据首部，称为封装<br>不同的协议层对数据包有不同的称谓，在传输层叫做段，在网络层叫做数据包，在链路层叫做帧</p>
-<p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-66ac2f6bc6240bda94886c71920539f8_720w.jpg" alt="数据包封装t"></p>
-<h2 id="TCP-IP协议族"><a href="#TCP-IP协议族" class="headerlink" title="TCP/IP协议族"></a>TCP/IP协议族</h2><p>大致可分为三部分</p>
-<ol>
-<li>internet协议(IP)  </li>
-<li>传输控制协议(TCP)和用户数据报协议(UDP)  </li>
-<li>TCP/UDP之上的一组协议，专门开发应用程序，如http、smtp、dns、rtp</li>
-</ol>
-<h2 id="传输层协议-TCP"><a href="#传输层协议-TCP" class="headerlink" title="传输层协议-TCP"></a>传输层协议-TCP</h2><p>传输控制协议(TCP)，一种可靠的面向连接的传输层服务.</p>
-<p>“<strong>三次握手</strong>”：类似生活中打电话。</p>
-<p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-f49460d9a380e8a69a870b7aee280e73_720w.jpg" alt="三次握手"></p>
-<p>简单理解：<br>客户端：我要对你讲话，你能听到吗；<br>服务端：我能听到；而且我也要对你讲话，你能听到吗；<br>客户端：我也能听到。  </p>
-<p>………<br>互相开始通话<br>………</p>
-<p>“<strong>四次挥手</strong>”：</p>
-<p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-2f2ed34a86ebbae1e023dbde0bbf6661_720w.jpg" alt="四次挥手"></p>
-<p>简单理解：<br>客户端：我说完了，我要闭嘴了；<br>服务端：我收到请求，我要闭耳朵了；<br>（客户端收到这个确认，于是安心地闭嘴了。）<br>…….<br>服务端还没倾诉完自己的故事，于是继续唠唠叨叨向客户端说了半天，直到说完为止<br>…….<br>服务端：我说完了，我也要闭嘴了；<br>客户端：我收到请求，我要闭耳朵了；（事实上，客户端为了保证这个确认包成功送达，等待了两个最大报文生命周期后，才闭上耳朵。）<br>（服务端收到这个确认，于是安心地闭嘴了。）  </p>
-<h2 id="传输层协议-UDP"><a href="#传输层协议-UDP" class="headerlink" title="传输层协议-UDP"></a>传输层协议-UDP</h2><p>用户数据报文协议（UDP），UDP 提供不可靠的非连接型传输层服务。<br>使用UDP时，不需要建立连接，也不跟踪这些参数，开销小，空间和时间上都具有优势。只需要知道对方的IP地址和端口号，就可以直接发送数据包。但是，能不能到达就不知道了。不可靠，但是传输速度快<br>简单理解：<br>类似生活中邮箱，把信件扔到邮箱中，至于有没有人去看它，没有人在乎。  </p>
-<h2 id="TCP-IP通讯过程"><a href="#TCP-IP通讯过程" class="headerlink" title="TCP/IP通讯过程"></a>TCP/IP通讯过程</h2><p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-28fbcd1cd86de3fc34c9ae5bf0266849_720w.jpg" alt="TCP/IP通讯过程"></p>
- 
+<p><img src="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/v2-472c86433a6fb5a9ec02de6ec9a9e0fa_720w.jpg" alt></p>
+<p>以下问题：<br>• 怎么创建一个动态库？<br>• 动态库文件的后缀名是什么？<br>• 怎么使用一个动态库？<br>• 动态库的命名规范？<br>• 系统默认的动态库的查找路径？<br>• 动态库显示连接所使用的系统库是什么？  </p>
+<h2 id="一、什么是库"><a href="#一、什么是库" class="headerlink" title="一、什么是库"></a>一、什么是库</h2><p>库是写好的现有的，成熟的，可以复用的代码。现实中每个程序都要依赖很多基础的底层库，不可能每个人的代码都从零开始，因此库的存在意义非同寻常。本质上来说库是一种可执行代码的二进制形式，可以被操作系统载入内存执行。<br>库有两种：<br><strong>• 静态库（.a、.lib）</strong><br><strong>• 动态库（.so、.dll）</strong><br>在一个程序的编译过程中，分为以下几个步骤：预处理，编译，汇编，链接。本文中讨论的链接库就是针对最后一个步骤「链接」而言的。  </p>
+<p><img src="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/v2-06de891debf93d3d9f4305d3fb520027_720w.jpg" alt></p>
+<p>动态库和静态库的区别<br>左图为静态链接库，右图为动态链接库  </p>
+<p><img src="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/v2-045b4704776b40a719a917102eb7bd98_720w.jpg" alt></p>
+<p>对于静态链接库而言在链接阶段，会将汇编生成的「目标文件.o」与引用到的库一起链接打包到可执行文件中。因此对应的链接方式称为静态链接：  </p>
+<p>• 静态链接库对函数库的链接是放在编译时期完成的。程序在运行时与函数库就没有了任何的联系。 </p>
+<p>• 它比较浪费空间和资源，因为所有相关的目标文件与牵涉到的函数库被链接合成一个可执行文件。  </p>
+<p>• 静态库对程序的更新和发布也会带来麻烦。如果静态库更新了，所有使用它的应用程序都需要重新编译、部署、发布给用户。<br>静态链接可以理解为最后生成了一个「单文件免安装绿色版」的程序，优点在于移植的时候只需要移动这一个文件，缺点在于文件体积非常大，为了解决这样的问题，就有了动态链接库。动态链接库在程序编译时并不会被连接到目标代码中，而是在程序运行时才被载入。  </p>
+<p>• 不同的应用程序如果调用相同的库，那么在内存里只需要有一份该共享库的实例，可以实现进程之间的资源共享。（因此动态库也称为共享库）规避了空间浪费问题。  </p>
+<p>• 动态库在程序运行时才被载入，也解决了静态库对程序的更新、部署和发布带来的麻烦。用户只需要更新动态库即可将一些程序升级变得简单，增量更新。<br>动态库连接到系统空间，如果多个程序连接了同一个库，那么只需要一份，优点在于编译程序的时候不会将对应的库文件全部打包在生成的程序中，而是保留了到对应库的链接，缺点就是移植的时候如果只移动了对应的程序没有安装相关的库的话，就会看到类似以下喜闻乐见的结果了。  </p>
+<p><img src="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/v2-45561967cc1091b78924cdf39185092f_720w.jpg" alt></p>
+<p>在 Linux 下一个动态库有y三个不同名字的文件组成：<br>• soname 文件<br>lib + 链接库名字 + .so + .版本号<br>• real name 文件<br>lib + 链接库名字 + .so + .版本号.次版本号.发行号<br>• linker name 文件<br>lib + 链接库名字 + .so<br>当程序在内部列出所需要的链接库时，仅仅使用 soname。当你创建一个链接库时，使用 real name。安装一个新的链接库时，把它复制到一个DLL文件夹里，然后运行程序 ldconfig。ldconfig 检查存在的 real name 文件，并且创建指向它符号链接 soname 文件。可能大家比较常见到的有 libsodium 等。  </p>
+<h2 id="二、创建一个动态库"><a href="#二、创建一个动态库" class="headerlink" title="二、创建一个动态库"></a>二、创建一个动态库</h2><p>有了上面关于库的一些基础知识之后，我们可以开始尝试创建一个动态库来供程序使用了。<br>比如我们有一个求最大值的函数 max(int a,int b,int c) ，放在文件 max.c 中文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int max(int a, int b, int c)</span><br><span class="line">&#123;</span><br><span class="line">   int max &#x3D; ( a &lt; b ) ? b : a;</span><br><span class="line">   return ( ( max &lt; c ) ? c : max );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -fPIC -shared -o libmax.so max.c</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">将其编译为共享库，-fPIC 是编译选项，PIC 是 Position Independent Code 的缩写，表示要生成位置无关的代码，这是动态库需要的特性；-shared 是链接选项，告诉gcc生成动态库而不是可执行文件。为了让用户知道我们的动态库中有哪些接口可用，我们需要编写对应的头文件，比如可以写一个 max.h ：</span><br></pre></td></tr></table></figure>
+<p>#ifndef <strong>MAX_H</strong><br>#define <strong>MAX_H</strong><br>int max(int a, int b, int c);<br>#endif</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">设置一个驱动函数来测试我们编写的动态库：</span><br></pre></td></tr></table></figure>
+<p>#include &lt;stdio.h&gt;<br>#include “max.h”<br>int main(int argc, char *argv[])<br>{<br>    int a = 12, b = -2, c = 120;<br>    printf(“The max value of 12, -2 and 120 is %d.\n”, max(a, b, c));<br>    return 0;<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">通过 gcc test.c -L. -lmax 来生成 a.out，其中-lmax表示要链接 libmax.so，-L. 表示搜索要链接的库文件时包含当前路径。  </span><br><span class="line">同一目录下同时存在同名的动态库和静态库，比如 libmax.so 和 libmax.a 都在当前路径下，则gcc会优先链接动态库。  </span><br><span class="line">但是这样直接运行的话，会出现一个错误：</span><br></pre></td></tr></table></figure>
+<p>./a.out: error while loading shared libraries: libmax.so: cannot open shared object file: No such file or directory</p>
+<pre><code>
+由于 Linux 是通过/etc/ld.so.cache文件搜寻要链接的动态库的，而/etc/ld.so.cache是 ldconfig 程序读取/etc/ld.so.conf文件生成的，本次使用的动态库libmax.so并不在对应的目录下，就会导致程序无法找到对应的动态链接库，这样我们的解决方法有二：  
+• 如果仅仅是本地使用，可以在编译后指定一个环境变量：LD_LIBRARY_PATH=. ./a.out ，这样程序会在本地寻找  
+• 如果需要在系统层面共享这个库，可以把 libmax.so 所在的路径添加到 /etc/ld.so.conf 中，再以 root 权限运行 ldconfig 程序，更新 /etc/ld.so.cache
+具体采用的方法因使用场景而异，如果仅仅是测试用途的话，可以直接使用添加环境变量的方式解决。</code></pre> 
       <!-- reward -->
       
     </div>
@@ -182,12 +190,12 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tang1129.github.io/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tang1129.github.io/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCP-IP-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" rel="tag">TCP/IP 网络通信</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" rel="tag">linux 动态链接</a></li></ul>
 
     </footer>
   </div>
@@ -195,15 +203,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2020/04/08/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BBC-C-%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" class="article-nav-link">
+      <a href="/2020/08/11/%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            深度解读C/C++指针与数组
+            线程死锁问题
           
         </div>
       </a>
     
+    
+      <a href="/2020/04/11/linux%E4%B8%8B%E8%BD%AF%E9%93%BE%E6%8E%A5%E5%92%8C%E7%A1%AC%E9%93%BE%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">linux下软链接和硬链接的区别</div>
+      </a>
     
   </nav>
 

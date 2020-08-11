@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    网络基础 |  
+    线程死锁问题 |  
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -47,7 +47,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-网络基础"
+  id="post-线程死锁问题"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -58,22 +58,22 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  网络基础
+  线程死锁问题
 </h1>
  
 
     </header>
      
     <div class="article-meta">
-      <a href="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="article-date">
-  <time datetime="2020-04-08T09:51:38.000Z" itemprop="datePublished">2020-04-08</time>
+      <a href="/2020/08/11/%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" class="article-date">
+  <time datetime="2020-08-11T10:37:41.000Z" itemprop="datePublished">2020-08-11</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">816</span>
+            <span class="post-count">2.3k</span>
         </span>
     </span>
 
@@ -82,7 +82,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">8 min</span>
         </span>
     </span>
 </div>
@@ -97,29 +97,18 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="OSI参考模型与TCP-IP参考模型"><a href="#OSI参考模型与TCP-IP参考模型" class="headerlink" title="OSI参考模型与TCP/IP参考模型"></a>OSI参考模型与TCP/IP参考模型</h2><p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-1e92808ddbe701c0f1434103cd109dd8_720w.jpg" alt="TCP/IP参考模型"></p>
+  <p>• 什么是线程死锁？<br>• 死锁如何产生？<br>• 如何避免线程死锁？<br>本文便就此问题进行分析，将用尽可能通俗的语言由浅入深地帮助大家理解死锁，了解其产生的原理与对应的解决方案。</p>
 <a id="more"></a>
 
-<p><strong>物理层</strong>: 指的是电信号的传递方式，比如现在以太网通用的网线<br><strong>链路层</strong>：负责网卡设备的驱动、帧同步（就是说从网线上检测到什么信号算作新帧的开始）、冲突检测（如果检测到冲突就自动重发）、数据差错校验等工作。<br><strong>网络层</strong>：负责点到点的传输（这里的“点”指主机或路由器），Internet上的主机通过IP地址来标识，IP协议是构成Internet的基础。<br><strong>传输层</strong>：负责端到端的传输（这里的“端”指源主机和目的主机）。传输层可选择TCP或UDP协议。<br><strong>会话层</strong>： 解决传输层有一个发送方多个接收方时确定发给谁的问题<br><strong>表示层</strong>：解决会话层仅仅是文字的交互，提供多种数据格式的显示功能（编码）<br><strong>应用层</strong>：将表示层封装，提供用户接口</p>
-<h2 id="什么是协议？"><a href="#什么是协议？" class="headerlink" title="什么是协议？"></a>什么是协议？</h2><p>双方“约定”好的，按照一定格式传输固定数据</p>
-<h2 id="数据包封装"><a href="#数据包封装" class="headerlink" title="数据包封装"></a>数据包封装</h2><p>应用层数据通过协议栈发到网络上时，每层协议都要加上一个数据首部，称为封装<br>不同的协议层对数据包有不同的称谓，在传输层叫做段，在网络层叫做数据包，在链路层叫做帧</p>
-<p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-66ac2f6bc6240bda94886c71920539f8_720w.jpg" alt="数据包封装t"></p>
-<h2 id="TCP-IP协议族"><a href="#TCP-IP协议族" class="headerlink" title="TCP/IP协议族"></a>TCP/IP协议族</h2><p>大致可分为三部分</p>
-<ol>
-<li>internet协议(IP)  </li>
-<li>传输控制协议(TCP)和用户数据报协议(UDP)  </li>
-<li>TCP/UDP之上的一组协议，专门开发应用程序，如http、smtp、dns、rtp</li>
-</ol>
-<h2 id="传输层协议-TCP"><a href="#传输层协议-TCP" class="headerlink" title="传输层协议-TCP"></a>传输层协议-TCP</h2><p>传输控制协议(TCP)，一种可靠的面向连接的传输层服务.</p>
-<p>“<strong>三次握手</strong>”：类似生活中打电话。</p>
-<p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-f49460d9a380e8a69a870b7aee280e73_720w.jpg" alt="三次握手"></p>
-<p>简单理解：<br>客户端：我要对你讲话，你能听到吗；<br>服务端：我能听到；而且我也要对你讲话，你能听到吗；<br>客户端：我也能听到。  </p>
-<p>………<br>互相开始通话<br>………</p>
-<p>“<strong>四次挥手</strong>”：</p>
-<p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-2f2ed34a86ebbae1e023dbde0bbf6661_720w.jpg" alt="四次挥手"></p>
-<p>简单理解：<br>客户端：我说完了，我要闭嘴了；<br>服务端：我收到请求，我要闭耳朵了；<br>（客户端收到这个确认，于是安心地闭嘴了。）<br>…….<br>服务端还没倾诉完自己的故事，于是继续唠唠叨叨向客户端说了半天，直到说完为止<br>…….<br>服务端：我说完了，我也要闭嘴了；<br>客户端：我收到请求，我要闭耳朵了；（事实上，客户端为了保证这个确认包成功送达，等待了两个最大报文生命周期后，才闭上耳朵。）<br>（服务端收到这个确认，于是安心地闭嘴了。）  </p>
-<h2 id="传输层协议-UDP"><a href="#传输层协议-UDP" class="headerlink" title="传输层协议-UDP"></a>传输层协议-UDP</h2><p>用户数据报文协议（UDP），UDP 提供不可靠的非连接型传输层服务。<br>使用UDP时，不需要建立连接，也不跟踪这些参数，开销小，空间和时间上都具有优势。只需要知道对方的IP地址和端口号，就可以直接发送数据包。但是，能不能到达就不知道了。不可靠，但是传输速度快<br>简单理解：<br>类似生活中邮箱，把信件扔到邮箱中，至于有没有人去看它，没有人在乎。  </p>
-<h2 id="TCP-IP通讯过程"><a href="#TCP-IP通讯过程" class="headerlink" title="TCP/IP通讯过程"></a>TCP/IP通讯过程</h2><p><img src="/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/v2-28fbcd1cd86de3fc34c9ae5bf0266849_720w.jpg" alt="TCP/IP通讯过程"></p>
+<h3 id="什么是线程死锁"><a href="#什么是线程死锁" class="headerlink" title="什么是线程死锁"></a>什么是线程死锁</h3><p>线程死锁是指由于两个或者多个线程互相持有对方所需要的资源，导致这些线程处于等待状态，无法前往执行。当线程进入对象的 synchronized 代码块时，便占有了资源，直到它退出该代码块或者调用 wait 方法，才释放资源，在此期间，其他线程将不能进入该代码块。当线程互相持有对方所需要的资源时，会互相等待对方释放资源，如果线程都不主动释放所占有的资源，将产生死锁。</p>
+<p><img src="/2020/08/11/%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/v2-509550e2be749e45dff1a91e638dbda4_720w.jpg" alt></p>
+<h3 id="死锁如何产生"><a href="#死锁如何产生" class="headerlink" title="死锁如何产生"></a>死锁如何产生</h3><p><strong>场景一</strong><br>星期日早上十点半，你在公路上开车，这是一条窄路，只能容纳一辆车。这时，迎面又驶来一辆车，你们都走到一半，谁也不想倒回去，于是各不相让，陷入无尽的等待。<br><strong>场景二</strong><br>你和她吵架了，谁也不理谁，甚至晚饭时间都各自煮饭。你在炒京酱肉丝，她在做葱烤鲫鱼。炒到一半你发现小葱被她全部拿走了，于是你默默等待她做好菜后再去拿，殊不知她也在等待你炒完菜后来拿酱油。<br><strong>场景三</strong><br>你和四个好朋友坐在圆形餐桌旁，你们只做两件事情：吃饭，或者思考。吃饭的时候，你们就停止思考。思考的时候，也停止吃饭。每个人面前有一碗兰州拉面，并且每个人左右两边各有一根筷子。你们必须要拿到两根筷子才能开始吃面。吃完后再放下筷子，让别人可以使用。吃了一会之后，每个人都拿起了自己左手边的筷子，导致每个人都只有一根筷子，并且等待别人吃完放下筷子给自己。可惜，没有人吃到面，所以没有人会放下筷子。（著名的哲学家就餐问题）<br><strong>场景四</strong><br>你有两个线程 A 和 B ，各自在加锁的状态下运行。A 持有一部分资源，并且等待 B 线程中的资源以完成自己的工作，而此时 B 线程也在等待 A 中的资源以完成自己的工作。由于他们都是锁定状态，所以他们必须完成了自己的工作后，自己持有的资源才能释放。于是线程无休止地等待，导致死锁。<br>代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">public class JavaTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void test() &#123;</span><br><span class="line">        final Object lockA &#x3D; new Object();</span><br><span class="line">        final Object lockB &#x3D; new Object();</span><br><span class="line">        new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                synchronized (lockA) &#123;</span><br><span class="line">                    try &#123;</span><br><span class="line">                        Thread.sleep(1000);</span><br><span class="line">                    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                    synchronized (lockB) &#123;</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.println(&quot;finish A&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        new Thread(new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                synchronized (lockB) &#123;</span><br><span class="line">                    try &#123;</span><br><span class="line">                        Thread.sleep(1000);</span><br><span class="line">                    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                    synchronized (lockA) &#123;</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.println(&quot;finish B&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(10000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此程序中，线程 A 持有 lockA 对象，并请求 lockB 对象；线程 B 持有 lockB 对象，并请求 lockA 对象。由于他们都在等待对方释放资源，所以会产生死锁。运行程序，将发现控制台无法打印出 “finish A” 和 “finish B” 消息。<br>这些都是程序员在工作或生活中会遇到的问题，人生就像是一个进程，时间是我们的主线程，期间做的每一件事都是开启的一个子线程。当多件事冲突时，并发问题就产生了。上述问题都指向同一类并发问题：死锁。  </p>
+<h3 id="产生死锁的的四个条件："><a href="#产生死锁的的四个条件：" class="headerlink" title="产生死锁的的四个条件："></a>产生死锁的的四个条件：</h3><p>1、互斥条件：一个资源每次只能被一个进程使用；<br>2、请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放；<br>3、不剥夺条件：进程已获得的资源，在没使用完之前，不能强行剥夺；<br>4、循环等待条件：多个进程之间形成一种互相循环等待资源的关系。<br>并发带来压力，有的人或有的程序，会因为承受不住压力而崩溃，情绪崩溃和程序崩溃没什么两样。当然，不论是做人还是写程序，面对问题时，正确的做法都应是采取策略，解除死锁。  </p>
+<h3 id="如何避免线程死锁"><a href="#如何避免线程死锁" class="headerlink" title="如何避免线程死锁"></a>如何避免线程死锁</h3><p><strong>方案一</strong><br>你想起书中所言：退一步海阔天空。但你也深知公平好过忍让。正值周赛时间，你摇下车窗，对对面的兄弟喊道：咱来比赛一场力扣周赛，谁输了谁倒出去让另一个人过吧！于是你们打开力扣，开始答题。半小时后，你凭借高超的代码水平 AC 了全部题目。对面司机对你拱手道：技不如人，甘拜下风。于是他倒了回去，让出了自己的一半路。最终你们都得以顺利通行。<br><strong>方案二</strong><br>你在炒菜时发现没有小葱，于是你换位思考，想到她会不会也缺少自己用着的材料。虽然她还在和你冷战，但你劝解自己一个大老爷们不应该和女孩子置气，于是你主动把自己用着的所有材料拿给了她。她感受到你设身处地为她着想，大为感动，你们和好如初。之后她为你们两个人一起炒了京酱肉丝和葱烤鲫鱼。<br><strong>方案三</strong><br>你和你的朋友们决定给筷子编上号：1~5。规定每个人拿筷子时必须先拿到自己两边的筷子中号码小的那一根，再去拿号码大的那一根。如果小的那一根没有拿到，不能先拿大的。当你们开始吃饭时，由于数字 5 不可能被一个人单独拿到。因为他旁边的另一根筷子编号必定比 5 小，所以不会再出现每个人都拿着一根的无限等待情形。<br><strong>方案四</strong><br>你在运行两个线程前，预先将线程 A 和 B 中的资源拷贝一份，让他们不需互相等待对方的资源，于是两个线程都得以顺利运行。这四种方案分别破坏了上述四个条件之一。这也是解决死锁问题的四种方法：1、破坏不剥夺条件：让对面的司机放弃了自己已有的资源。2、破坏请求与保持条件：在自己需要的材料缺少时，主动放弃自己持有的资源，防止出现互相等待。3、破坏循环等待条件：由于筷子指定了编号和获取规则，所以每个锁定状态都将按照顺序执行，于是便杜绝了环路等待条件。4、破坏互斥条件：由于每次使用时都拷贝一份，所以一个资源可以被多个进程使用。</p>
+<p>事实上，使用预先拷贝资源解决死锁问题的方案一般并不常用。这是由于拷贝的成本往往很大，并且影响效率。实际工作中较常采用的是第三种方案，通过控制加锁顺序解决死锁：<br>• 加锁顺序：当多个线程需要相同的一些锁，但是按照不同的顺序加锁，死锁就很容易发生。如果能确保所有的线程都是按照相同的顺序获得锁，那么死锁就不会发生。当然这种方式需要你事先知道所有可能会用到的锁，然而总有些时候是无法预知的。<br>除此之外，我们还可以通过设置加锁时限或添加死锁检测避免死锁：<br>• 加锁时限：加上一个超时时间，若一个线程没有在给定的时限内成功获得所有需要的锁，则会进行回退并释放所有已经获得的锁，然后等待一段随机的时间再重试。但是如果有非常多的线程同一时间去竞争同一批资源，就算有超时和回退机制，还是可能会导致这些线程重复地尝试但却始终得不到锁。<br>死锁检测：死锁检测即每当一个线程获得了锁，会在线程和锁相关的数据结构中（ map 、 graph 等）将其记下。除此之外，每当有线程请求锁，也需要记录在这个数据结构中。死锁检测是一个更好的死锁预防机制，它主要是针对那些不可能实现按序加锁并且锁超时也不可行的场景。  </p>
  
       <!-- reward -->
       
@@ -182,12 +171,12 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tang1129.github.io/2020/04/08/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://tang1129.github.io/2020/08/11/%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCP-IP-%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" rel="tag">TCP/IP 网络通信</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81/" rel="tag">线程死锁</a></li></ul>
 
     </footer>
   </div>
@@ -195,15 +184,11 @@
    
   <nav class="article-nav">
     
-      <a href="/2020/04/08/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BBC-C-%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            深度解读C/C++指针与数组
-          
-        </div>
-      </a>
     
+      <a href="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">linux下的动态链接库问题</div>
+      </a>
     
   </nav>
 
