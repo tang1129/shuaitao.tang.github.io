@@ -115,20 +115,26 @@
 <p><img src="/2020/08/11/linux%E4%B8%8B%E7%9A%84%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%97%AE%E9%A2%98/v2-45561967cc1091b78924cdf39185092f_720w.jpg" alt></p>
 <p>在 Linux 下一个动态库有y三个不同名字的文件组成：<br>• soname 文件<br>lib + 链接库名字 + .so + .版本号<br>• real name 文件<br>lib + 链接库名字 + .so + .版本号.次版本号.发行号<br>• linker name 文件<br>lib + 链接库名字 + .so<br>当程序在内部列出所需要的链接库时，仅仅使用 soname。当你创建一个链接库时，使用 real name。安装一个新的链接库时，把它复制到一个DLL文件夹里，然后运行程序 ldconfig。ldconfig 检查存在的 real name 文件，并且创建指向它符号链接 soname 文件。可能大家比较常见到的有 libsodium 等。  </p>
 <h2 id="二、创建一个动态库"><a href="#二、创建一个动态库" class="headerlink" title="二、创建一个动态库"></a>二、创建一个动态库</h2><p>有了上面关于库的一些基础知识之后，我们可以开始尝试创建一个动态库来供程序使用了。<br>比如我们有一个求最大值的函数 max(int a,int b,int c) ，放在文件 max.c 中文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int max(int a, int b, int c)</span><br><span class="line">&#123;</span><br><span class="line">   int max &#x3D; ( a &lt; b ) ? b : a;</span><br><span class="line">   return ( ( max &lt; c ) ? c : max );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以通过： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -fPIC -shared -o libmax.so max.c</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">将其编译为共享库，-fPIC 是编译选项，PIC 是 Position Independent Code 的缩写，表示要生成位置无关的代码，这是动态库需要的特性；-shared 是链接选项，告诉gcc生成动态库而不是可执行文件。为了让用户知道我们的动态库中有哪些接口可用，我们需要编写对应的头文件，比如可以写一个 max.h ：</span><br></pre></td></tr></table></figure>
-<p>#ifndef <strong>MAX_H</strong><br>#define <strong>MAX_H</strong><br>int max(int a, int b, int c);<br>#endif</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">设置一个驱动函数来测试我们编写的动态库：</span><br></pre></td></tr></table></figure>
-<p>#include &lt;stdio.h&gt;<br>#include “max.h”<br>int main(int argc, char *argv[])<br>{<br>    int a = 12, b = -2, c = 120;<br>    printf(“The max value of 12, -2 and 120 is %d.\n”, max(a, b, c));<br>    return 0;<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">通过 gcc test.c -L. -lmax 来生成 a.out，其中-lmax表示要链接 libmax.so，-L. 表示搜索要链接的库文件时包含当前路径。  </span><br><span class="line">同一目录下同时存在同名的动态库和静态库，比如 libmax.so 和 libmax.a 都在当前路径下，则gcc会优先链接动态库。  </span><br><span class="line">但是这样直接运行的话，会出现一个错误：</span><br></pre></td></tr></table></figure>
-<p>./a.out: error while loading shared libraries: libmax.so: cannot open shared object file: No such file or directory</p>
-<pre><code>
-由于 Linux 是通过/etc/ld.so.cache文件搜寻要链接的动态库的，而/etc/ld.so.cache是 ldconfig 程序读取/etc/ld.so.conf文件生成的，本次使用的动态库libmax.so并不在对应的目录下，就会导致程序无法找到对应的动态链接库，这样我们的解决方法有二：  
-• 如果仅仅是本地使用，可以在编译后指定一个环境变量：LD_LIBRARY_PATH=. ./a.out ，这样程序会在本地寻找  
-• 如果需要在系统层面共享这个库，可以把 libmax.so 所在的路径添加到 /etc/ld.so.conf 中，再以 root 权限运行 ldconfig 程序，更新 /etc/ld.so.cache
-具体采用的方法因使用场景而异，如果仅仅是测试用途的话，可以直接使用添加环境变量的方式解决。</code></pre> 
+<pre><code>int max(int a, int b, int c)
+{
+   int max = ( a &lt; b ) ? b : a;
+   return ( ( max &lt; c ) ? c : max );
+}</code></pre><p>可以通过： </p>
+<pre><code>gcc -fPIC -shared -o libmax.so max.c</code></pre><p>将其编译为共享库，-fPIC 是编译选项，PIC 是 Position Independent Code 的缩写，表示要生成位置无关的代码，这是动态库需要的特性；-shared 是链接选项，告诉gcc生成动态库而不是可执行文件。为了让用户知道我们的动态库中有哪些接口可用，我们需要编写对应的头文件，比如可以写一个 max.h ： </p>
+<pre><code>#ifndef __MAX_H__
+#define __MAX_H__
+int max(int a, int b, int c);
+#endif</code></pre><p>设置一个驱动函数来测试我们编写的动态库：  </p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &quot;max.h&quot;
+int main(int argc, char *argv[])
+{
+    int a = 12, b = -2, c = 120;
+    printf(&quot;The max value of 12, -2 and 120 is %d.\n&quot;, max(a, b, c));
+    return 0;
+}</code></pre><p>通过 gcc test.c -L. -lmax 来生成 a.out，其中-lmax表示要链接 libmax.so，-L. 表示搜索要链接的库文件时包含当前路径。<br>同一目录下同时存在同名的动态库和静态库，比如 libmax.so 和 libmax.a 都在当前路径下，则gcc会优先链接动态库。<br>但是这样直接运行的话，会出现一个错误： </p>
+<pre><code>./a.out: error while loading shared libraries: libmax.so: cannot open shared object file: No such file or directory</code></pre><p>由于 Linux 是通过/etc/ld.so.cache文件搜寻要链接的动态库的，而/etc/ld.so.cache是 ldconfig 程序读取/etc/ld.so.conf文件生成的，本次使用的动态库libmax.so并不在对应的目录下，就会导致程序无法找到对应的动态链接库，这样我们的解决方法有二：<br>• 如果仅仅是本地使用，可以在编译后指定一个环境变量：LD_LIBRARY_PATH=. ./a.out ，这样程序会在本地寻找<br>• 如果需要在系统层面共享这个库，可以把 libmax.so 所在的路径添加到 /etc/ld.so.conf 中，再以 root 权限运行 ldconfig 程序，更新 /etc/ld.so.cache<br>具体采用的方法因使用场景而异，如果仅仅是测试用途的话，可以直接使用添加环境变量的方式解决。</p>
+ 
       <!-- reward -->
       
     </div>
@@ -334,7 +340,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/799954193AC0ABF058F84A59D9419D91D7BF0D322.jpg" alt="夏了夏天"></a>
+    <a href="/"><img src="/source/images/799954193AC0ABF058F84A59D9419D91D7BF0D322.jpg" alt="夏了夏天"></a>
   </div>
   
   <ul class="nav nav-main">
