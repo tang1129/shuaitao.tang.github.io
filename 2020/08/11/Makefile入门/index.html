@@ -98,7 +98,10 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>今天抽空研究了下 Makefile，在这里整理一下各处搜到的资料，以备将来复习时快速上手，同时也帮助和我一样的初学者们节约时间（全文阅读时间不超过20分钟）。<br> 首先，假设我们有如下几个代码文件：main.cpp functions.h function1.cpp function2.cpp  （代码来自：Using make and writing Makefile(in C++ or C)）。  </p>
+  <p>今天抽空研究了下 Makefile，在这里整理一下各处搜到的资料，以备将来复习时快速上手，同时也帮助和我一样的初学者们节约时间（全文阅读时间不超过20分钟）。  </p>
+<a id="more"></a>
+
+<p> 首先，假设我们有如下几个代码文件：main.cpp functions.h function1.cpp function2.cpp  （代码来自：Using make and writing Makefile(in C++ or C)）。  </p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; functions.h</span><br><span class="line"></span><br><span class="line">void print_hello();</span><br><span class="line">int factorial(int n);</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; function1.cpp</span><br><span class="line"></span><br><span class="line">#include &quot;functions.h&quot;</span><br><span class="line"></span><br><span class="line">int factorial(int n)</span><br><span class="line">&#123;</span><br><span class="line">    if (n!&#x3D;1)</span><br><span class="line">    &#123;</span><br><span class="line">        return n*factorial(n-1);</span><br><span class="line">    &#125;</span><br><span class="line">    else </span><br><span class="line">    &#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -265,6 +268,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2020/08/11/C-C-%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            C/C++内存对齐问题
+          
+        </div>
+      </a>
     
     
       <a href="/2020/08/11/%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" class="article-nav-link">
